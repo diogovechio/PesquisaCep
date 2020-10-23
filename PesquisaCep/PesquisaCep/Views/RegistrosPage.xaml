@@ -5,10 +5,17 @@
              Title="Registros">
     <ContentPage.Content>
         <StackLayout BackgroundColor="white">
-            <Label Text="Registros salvos"
+            <Label Text="Registros Salvos"
+                FontSize="Large"
+                Padding="30,30,30,0"
                 TextColor="Gray"
-                VerticalOptions="CenterAndExpand" 
                 HorizontalOptions="CenterAndExpand" />
+
+            <Label Text="Nenhum registro salvo"
+                   x:Name="listaCEP"
+                   TextColor="Gray"
+                   HorizontalTextAlignment="Center"/>
+
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

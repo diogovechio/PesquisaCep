@@ -13,7 +13,6 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Dynamic;
-using Ceps.Models;
 using SQLite;
 
 
@@ -22,6 +21,8 @@ namespace PesquisaCep
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class Consulta : ContentPage
     {
+        string Arquivo = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "ceps.txt");
+
         public Consulta()
         {
             InitializeComponent();
@@ -47,19 +48,28 @@ namespace PesquisaCep
 
                     var ObjCEP = JsonSerializer.Deserialize<EnderecoJSON>(objResponse.ToString());
 
+                    if (ObjCEP.cep == null)
+                    {
+                        titleCEP.Text = "Erro";
+                        resCEP.Text = "CEP inexistente";
+                        return;
+                    }
+
                     titleCEP.Text = ObjCEP.cep;
                     resCEP.Text = $"{ObjCEP.logradouro}, {ObjCEP.bairro}\n{ObjCEP.localidade}/{ObjCEP.uf}";
 
-                    var cepSave = (CepModel)BindingContext;
+                    string SaveCEP;
+                    string NovoCEP;
+                    SaveCEP = JsonSerializer.Serialize(ObjCEP.cep);
 
-                    /*cepSave.Cep = ObjCEP.cep;
-                    cepSave.Logradouro = "TesteLOG";
-                    cepSave.Bairro = "Teste";
-                    cepSave.Localidade = (ObjCEP.localidade).ToString();
-                    cepSave.Uf = (ObjCEP.uf).ToString();*/
+                    if (File.Exists(Arquivo))
+                    {
+                        NovoCEP = File.ReadAllText(Arquivo);
 
-                    App.Database.SaveCepAsync(cepSave);
-                    Navigation.PopAsync();
+                        SaveCEP += "\n" + NovoCEP;
+                    }
+
+                    File.WriteAllText(Arquivo, SaveCEP);
                 }
             }
             else
@@ -80,3 +90,41 @@ namespace PesquisaCep
         }
     }
 }
+
+
+/*using System;
+using System.IO;
+using Xamarin.Forms;
+
+namespace Notes
+{
+    public partial class MainPage : ContentPage
+    {
+        string _fileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "notes.txt");
+
+        public MainPage()
+        {
+            InitializeComponent();
+
+            if (File.Exists(_fileName))
+            {
+                _editor.Text = File.ReadAllText(_fileName);
+            }
+        }
+
+        void OnSaveButtonClicked(object sender, EventArgs e)
+        {
+            File.WriteAllText(_fileName, _editor.Text);
+        }
+
+        void OnDeleteButtonClicked(object sender, EventArgs e)
+        {
+            if (File.Exists(_fileName))
+            {
+                File.Delete(_fileName);
+            }
+            _editor.Text = string.Empty;
+        }
+    }
+}
+*/
