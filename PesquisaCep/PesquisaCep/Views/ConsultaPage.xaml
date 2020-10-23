@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PesquisaCep.Consulta"
+             Title="Consulta">
+
+    <ContentPage.Content>
+        <StackLayout BackgroundColor="white">
+            <Label Text="Consulta de CEP"
+                FontSize="Large"
+                Padding="30,30,30,0"
+                TextColor="Gray"
+                HorizontalOptions="CenterAndExpand" />
+
+            <Label Text="Digite apenas os números no campo abaixo:"
+                TextColor="Gray"
+                HorizontalOptions="CenterAndExpand" />
+
+            <Entry Keyboard="Numeric"
+                   TextColor="Gray"
+                   x:Name="etCEP"
+                   MaxLength="8"/>
+
+            <Button Text="Consultar"
+                    x:Name="btnConsulta"
+                    Clicked="ClickConsulta"/>
+            
+            <Label Text=""
+                   x:Name="titleCEP"
+                   TextColor="Gray"
+                   FontSize="Title"
+                   HorizontalTextAlignment="Center"/>
+
+            <Label Text=""
+                   x:Name="resCEP"
+                   TextColor="Gray"
+                   HorizontalTextAlignment="Center"/>
+        </StackLayout>
+
+    </ContentPage.Content>
+</ContentPage>
