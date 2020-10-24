@@ -4,18 +4,23 @@
              x:Class="PesquisaCep.Registros"
              Title="Registros">
     <ContentPage.Content>
-        <StackLayout BackgroundColor="white">
+        <StackLayout BackgroundColor="white" >
+            
+            <Button Text="Apagar Histórico"
+                    x:Name="btnApagar"
+                    Clicked="ClickApagar"/>
+            
             <Label Text="Registros Salvos"
                 FontSize="Large"
-                Padding="30,30,30,0"
+                Padding="30,0"
                 TextColor="Gray"
                 HorizontalOptions="CenterAndExpand" />
 
-            <Label Text="Nenhum registro salvo"
+            <Label Text="Nenhum registro salvo."
                    x:Name="listaCEP"
                    TextColor="Gray"
                    HorizontalTextAlignment="Center"/>
-
+            
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

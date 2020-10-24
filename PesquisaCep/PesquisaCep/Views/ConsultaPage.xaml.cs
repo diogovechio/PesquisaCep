@@ -51,7 +51,7 @@ namespace PesquisaCep
                     if (ObjCEP.cep == null)
                     {
                         titleCEP.Text = "Erro";
-                        resCEP.Text = "CEP inexistente";
+                        resCEP.Text = "CEP inexistente.";
                         return;
                     }
 
@@ -60,13 +60,13 @@ namespace PesquisaCep
 
                     string SaveCEP;
                     string NovoCEP;
-                    SaveCEP = JsonSerializer.Serialize(ObjCEP.cep);
+
+                    SaveCEP = $"{ObjCEP.cep}\n{ObjCEP.logradouro}, {ObjCEP.bairro}\n{ObjCEP.localidade}/{ObjCEP.uf}";
 
                     if (File.Exists(Arquivo))
                     {
                         NovoCEP = File.ReadAllText(Arquivo);
-
-                        SaveCEP += "\n" + NovoCEP;
+                        SaveCEP += "\n\n" + NovoCEP;
                     }
 
                     File.WriteAllText(Arquivo, SaveCEP);
@@ -90,41 +90,3 @@ namespace PesquisaCep
         }
     }
 }
-
-
-/*using System;
-using System.IO;
-using Xamarin.Forms;
-
-namespace Notes
-{
-    public partial class MainPage : ContentPage
-    {
-        string _fileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "notes.txt");
-
-        public MainPage()
-        {
-            InitializeComponent();
-
-            if (File.Exists(_fileName))
-            {
-                _editor.Text = File.ReadAllText(_fileName);
-            }
-        }
-
-        void OnSaveButtonClicked(object sender, EventArgs e)
-        {
-            File.WriteAllText(_fileName, _editor.Text);
-        }
-
-        void OnDeleteButtonClicked(object sender, EventArgs e)
-        {
-            if (File.Exists(_fileName))
-            {
-                File.Delete(_fileName);
-            }
-            _editor.Text = string.Empty;
-        }
-    }
-}
-*/

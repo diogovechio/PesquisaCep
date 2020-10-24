@@ -28,5 +28,14 @@ namespace PesquisaCep
                 listaCEP.Text = File.ReadAllText(Arquivo);
             }
         }
+
+        void ClickApagar(object sender, EventArgs e)
+        {
+            if (File.Exists(Arquivo))
+            {
+                File.Delete(Arquivo);
+            }
+            listaCEP.Text = "Registros deletados com sucesso.";
+        }
     }
 }
