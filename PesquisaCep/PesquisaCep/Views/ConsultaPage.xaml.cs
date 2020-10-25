@@ -35,42 +35,50 @@ namespace PesquisaCep
                 string HTTP = "http://viacep.com.br/ws/";
                 HTTP += etCEP.Text;
                 HTTP += "/json/";
-
-                var HTTPRequest = WebRequest.CreateHttp(HTTP);
-                HTTPRequest.Method = "GET";
-                HTTPRequest.UserAgent = "PesquisaCEP";
-
-                using(var resposta = HTTPRequest.GetResponse())
+                try
                 {
-                    var streamDados = resposta.GetResponseStream();
-                    StreamReader reader = new StreamReader(streamDados);
-                    object objResponse = reader.ReadToEnd();
+                    var HTTPRequest = WebRequest.CreateHttp(HTTP);
+                    HTTPRequest.Method = "GET";
+                    HTTPRequest.UserAgent = "PesquisaCEP";
 
-                    var ObjCEP = JsonSerializer.Deserialize<EnderecoJSON>(objResponse.ToString());
 
-                    if (ObjCEP.cep == null)
+                    using(var resposta = HTTPRequest.GetResponse())
                     {
-                        titleCEP.Text = "Erro";
-                        resCEP.Text = "CEP inexistente.";
-                        return;
+                        var streamDados = resposta.GetResponseStream();
+                        StreamReader reader = new StreamReader(streamDados);
+                        object objResponse = reader.ReadToEnd();
+
+                        var ObjCEP = JsonSerializer.Deserialize<EnderecoJSON>(objResponse.ToString());
+
+                        if (ObjCEP.cep == null)
+                        {
+                            titleCEP.Text = "Erro";
+                            resCEP.Text = "CEP inexistente.";
+                            return;
+                        }
+
+                        titleCEP.Text = ObjCEP.cep;
+                        resCEP.Text = $"{ObjCEP.logradouro}\n{ObjCEP.bairro}\n{ObjCEP.localidade}/{ObjCEP.uf}";
+
+                        string SaveCEP;
+                        string NovoCEP;
+
+                        SaveCEP = $"{ObjCEP.cep}\n{ObjCEP.logradouro}\n{ObjCEP.bairro}\n{ObjCEP.localidade}/{ObjCEP.uf}";
+
+                        if (File.Exists(Arquivo))
+                        {
+                            NovoCEP = File.ReadAllText(Arquivo);
+                            SaveCEP += "\n\n" + NovoCEP;
+                        }
+
+                        File.WriteAllText(Arquivo, SaveCEP);
                     }
-
-                    titleCEP.Text = ObjCEP.cep;
-                    resCEP.Text = $"{ObjCEP.logradouro}, {ObjCEP.bairro}\n{ObjCEP.localidade}/{ObjCEP.uf}";
-
-                    string SaveCEP;
-                    string NovoCEP;
-
-                    SaveCEP = $"{ObjCEP.cep}\n{ObjCEP.logradouro}, {ObjCEP.bairro}\n{ObjCEP.localidade}/{ObjCEP.uf}";
-
-                    if (File.Exists(Arquivo))
-                    {
-                        NovoCEP = File.ReadAllText(Arquivo);
-                        SaveCEP += "\n\n" + NovoCEP;
-                    }
-
-                    File.WriteAllText(Arquivo, SaveCEP);
                 }
+                catch
+                {
+                    titleCEP.Text = "Sem conexão.";
+                }
+
             }
             else
             {
